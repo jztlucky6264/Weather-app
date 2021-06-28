@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Weather App</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: box;
+      }
+      body {
+        background-image: url("C:/Users/lucky yadav/Downloads/cloudy.jpg");
+        height: 100%;
+        overflow: hidden;
+        background-repeat: no-repeat;
+        background-position: top;
+        font-family: Arial, Helvetica, sans-serif;
+        background-size: cover;
+      }
+      .app-main {
+        max-height: 100%;
+        width: 60vh;
+        margin: 50px auto;
+        background-color: rgba(240, 248, 255, 0.6);
+        padding: 20px;
+        text-align: center;
+        overflow: auto;
+      }
+      .app-main > * {
+        margin-bottom: 70px;
+      }
+      .input-box {
+        width: 100%;
+        background-color: rgba(255, 255, 255, 0.6);
+        border: none;
+        outline: none;
+        color: #582233;
+        font-size: 1.2rem;
+        height: 30px;
+        border-radius: 5px;
+        text-align: center;
+      }
+      .input-box:focus {
+        background-color: rgba(255, 255, 255);
+      }
+      .Weather-body {
+        color: #582233;
+        padding: 20px;
+        line-height: 2rem;
+        border-radius: 10px;
+        background-color: rgba(255, 255, 255, 0.6);
+        height: 50vh;
+      }
+      .location-details {
+        font-weight: bold;
+        padding: 20px;
+      }
+      .weather-status {
+        padding: 20px;
+      }
+      .temp {
+        font-weight: bold;
+        font-size: 40px;
+        text-shadow: 2px 4px rgba(0, 0, 0, 0.3);
+      }
+      .min-max,
+      .weather {
+        font-size: 12pt;
+        font-weight: 600;
+      }
+      .Weather {
+        font-weight: bold;
+        font-size: 10pt;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app-main">
+      <div class="searchinputbox" id="searchinputbox">
+        <input
+          type="text"
+          id="input-box"
+          class="input-box"
+          placeholder="Enter city name...."
+        />
+      </div>
+      <div class="Weather-body">
+        <div class="location-details">
+          <div class="city" id="city">delhi</div>
+          <div class="date" id="date">14 dec(tuesday),2020</div>
+        </div>
+        <div class="weather-status">
+          <div class="temp" id="temp">34&deg;C</div>
+          <div class="min-max" id="min-max">32&deg;C(min)/34&deg;C (max)</div>
+          <div class="Weather" id="Weather">sunsine</div>
+          <div class="img"></div>
+        </div>
+      </div>
+    </div>
+    <script>
+      const api = {
+        key: "dc62d4546785d5c9f59a6ec5f3682b5a",
+        base: "http://api.openweathermap.org/data/2.5/",
+      };
+      const searchinputbox = document.querySelector(".input-box");
+
+      searchinputbox.addEventListener("keypress", setQuery);
+
+      function setQuery(event) {
+        if (event.keyCode == 13) {
+          console.log(searchinputbox.value);
+          getWeatherReport(searchinputbox.value);
+        }
+      }
+
+      function getWeatherReport(query) {
+        fetch(`${api.base}weather?q=${query}&units=metric&appid=${api.key}`)
+          .then((weather) => {
+            return weather.json();
+          })
+          .then(showWeatherReport);
+      }
+
+      function showWeatherReport(weather) {
+        console.log(weather);
+        let city = document.querySelector(".city");
+        city.innerText = `${weather.name}, ${weather.sys.country}`;
+
+        let temperature = document.querySelector(".temp");
+        temperature.innerHTML = `${Math.round(weather.main.temp)}&deg;C`;
+
+        let minMaxtemp = document.querySelector(".min-max");
+        minMaxtemp.innerHTML = `${Math.floor(
+          weather.main.temp_min
+        )}&deg;C (min)/${Math.ceil(weather.main.temp_max)}&deg;C(max)`;
+        let WeatherType = document.querySelector(".Weather");
+        WeatherType.innerText = `${weather.weather[0].main}`;
+
+        let now = new Date();
+        let date = document.querySelector(".date");
+        date.innerText = dateupdate(now);
+
+        if (WeatherType.textContent == "") {
+          document.body.style.backgroundImage =
+            "url('https://images.unsplash.com/photo-1500534623283-312aade485b7?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80')";
+        } else if (WeatherType.textContent == "Rain") {
+          document.body.style.backgroundImage =
+            "url('https://images.unsplash.com/photo-1534274988757-a28bf1a57c17?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=675&q=80')";
+        } else if (WeatherType.textContent == "Haze") {
+          document.body.style.backgroundImage =
+            "url('https://images.unsplash.com/36/STzPBJUsSza3mzUxiplj_DSC09775.JPG?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=742&q=80')";
+        } else if (WeatherType.textContent == "Mist") {
+          document.body.style.backgroundImage =
+            "url('https://images.unsplash.com/photo-1485236715568-ddc5ee6ca227?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=333&q=80')";
+        } else if (WeatherType.textContent == "Clear") {
+          document.body.style.backgroundImage =
+            "url('https://images.unsplash.com/photo-1517574150334-6d3578f2cc5a?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=333&q=80')";
+        } else if (WeatherType.textContent == "Clouds") {
+          document.body.style.backgroundImage =
+            "url('https://images.unsplash.com/photo-1594156596782-656c93e4d504?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=675&q=80')";
+        }
+      }
+
+      function dateupdate(d) {
+        let days = [
+          "Sunday",
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday",
+          "Saturday",
+        ];
+
+        let months = [
+          "January",
+          "February",
+          "March",
+          "April",
+          "May",
+          "June",
+          "July",
+          "August",
+          "September",
+          "October",
+          "November",
+          "December",
+        ];
+
+        let year = d.getFullYear();
+        let month = months[d.getMonth()];
+        let date = d.getDate();
+        let day = days[d.getDay()];
+
+        return `${date} ${month} (${day}) , ${year}`;
+      }
+    </script>
+  </body>
+</html>
