@@ -4,7 +4,7 @@
   box-sizing: box;
 }
 body {
-  background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+  background: url("https://images.unsplash.com/photo-1500534623283-312aade485b7?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80");
   background-size: 400% 400%;
   animation: gradient 15s ease infinite;
   height: 100%;
@@ -18,7 +18,7 @@ body {
     background-position: 100% 50%;
   }
   100% {
-    background-position: 0% 50%;
+    background-position: 200% 100%;
   }
 }
 .app-main {
